@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Spinny Clock</string>
+    <string name="spinny_clock_label">Spinny Clock</string>
+    <string name="game_label">Game</string>
+    <string name="game_over_label">Game Over</string>
+    <string name="about_label">About</string>
+    <string name="rules_label">Rules</string>
+    <string name="rules_menu_title">Rules</string>
+    <string name="about_menu_title">About</string>
+    <string name="game_over">Game Over</string>
+    <string name="play_again">Play Again</string>
+    <string name="start">Start</string>
+    <string name="scoreFormat">Score: %d</string>
+    <string name="yourScoreFormat">Your Score: %d</string>
+    <string name="rules_fragment_text">Rules:
+    \n- press START button to begin game
+    \n- spin minute hand to set required time
+    \n- you only have 10 seconds to do this!
+    </string>
+    <string name="about_fragment_text">This app is designed for training purpose.
+        \nLearning Objectives:
+        \n- learn NavigationUI: Up Button, Navigation Drawer, Navigation Graph, Slide Animation
+        \n- learn ViewModel architecture
+        \n- learn to create ViewModel using ViewModelProvider
+        \n- learn to implement Observer Pattern
+        \n- data binding between ViewModel and layout.xml
+        \n- playback sound
+        \n- learn to create custom view
+        </string>
+    <string name="drawer_header_image">Drawer Header Image</string>
+
+</resources>
