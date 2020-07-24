@@ -14,11 +14,12 @@ import androidx.navigation.fragment.findNavController
 import com.alexaat.spinnyclock.R
 import com.alexaat.spinnyclock.databinding.FragmentGameBinding
 import com.alexaat.spinnyclock.viewmodels.GameFragmentViewModel
+import com.alexaat.spinnyclock.views.OnClockTickListener
+import com.alexaat.spinnyclock.views.OnTimeChangedListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-
 
 class GameFragment : Fragment() {
 
@@ -30,10 +31,24 @@ class GameFragment : Fragment() {
     lateinit var player: MediaPlayer
     private var playerLocked = false
 
+    private lateinit var onClockTickListener: OnClockTickListener
+    private lateinit var onTimeChangedListener: OnTimeChangedListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val binding: FragmentGameBinding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_game, container, false)
+
+        onClockTickListener = OnClockTickListener {
+            if(!playerLocked){
+                playTick()
+            }
+        }
+        binding.clockView.setOnClockTickListener(onClockTickListener)
+
+        onTimeChangedListener = OnTimeChangedListener{
+            viewModel.setSelectedTime(it)
+        }
+        binding.clockView.setOnTimeChangedListener(onTimeChangedListener)
 
         binding.lifecycleOwner = this
 
@@ -69,20 +84,6 @@ class GameFragment : Fragment() {
             }
         })
 
-        binding.clockView.time.observe(viewLifecycleOwner, Observer {
-            it?.let { calendar ->
-                viewModel.setSelectedTime(calendar)
-
-            }
-        })
-
-        binding.clockView.tickSound.observe(viewLifecycleOwner, Observer {
-            it?.let{beep->
-                if(beep && !playerLocked){
-                        playTick()
-                }
-            }
-        })
         return binding.root
     }
 

@@ -1,13 +1,10 @@
 package com.alexaat.spinnyclock.views
 
-
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.alexaat.spinnyclock.R
 import com.alexaat.spinnyclock.utils.*
 import java.util.*
@@ -15,15 +12,6 @@ import kotlin.math.*
 
 
 class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?= null, defStyleAttr:Int = 0) : View(context,attrs,defStyleAttr){
-
-    private val _time = MutableLiveData<Calendar>()
-    val time:LiveData<Calendar>
-        get() = _time
-
-    private val _tickSound = MutableLiveData<Boolean>(false)
-    val tickSound:LiveData<Boolean>
-        get() = _tickSound
-
 
     private var hours = 22
     private var minutes = 10
@@ -62,6 +50,16 @@ class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?=
 
     private var touchInRange = false
 
+    private lateinit var onClockTickListener:OnClockTickListener
+    private lateinit var onTimeChangedListener:OnTimeChangedListener
+
+    fun setOnClockTickListener(onClockTickListener:OnClockTickListener){
+        this.onClockTickListener = onClockTickListener
+    }
+
+    fun setOnTimeChangedListener(onTimeChangedListener:OnTimeChangedListener){
+        this.onTimeChangedListener = onTimeChangedListener
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         centrePoint = PointF((width / 2).toFloat(),(height / 2).toFloat())
@@ -144,7 +142,8 @@ class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?=
             val calendar = Calendar.getInstance()
             calendar.set(Calendar.HOUR_OF_DAY,hours)
             calendar.set(Calendar.MINUTE,minutes)
-            _time.value = calendar
+            onTimeChangedListener.onTimeChanged(calendar)
+
         }
         if(event?.action == MotionEvent.ACTION_MOVE){
            if(touchInRange){
@@ -190,11 +189,23 @@ class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?=
             getHoursHandCoordinates()
             getMinutesHandCoordinates()
 
-            _tickSound.value = true
-            _tickSound.value = false
+            onClockTickListener.onTick()
 
             invalidate()
         }
     }
 
+
+}
+
+class OnClockTickListener(private val listener: ()->Unit){
+    fun onTick(){
+        listener()
+    }
+}
+
+class OnTimeChangedListener(private val listener: (calendar:Calendar)->Unit){
+    fun onTimeChanged(calendar:Calendar){
+        listener(calendar)
+    }
 }
