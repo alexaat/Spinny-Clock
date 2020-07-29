@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,8 +15,10 @@ import androidx.navigation.fragment.findNavController
 import com.alexaat.spinnyclock.R
 import com.alexaat.spinnyclock.databinding.FragmentGameBinding
 import com.alexaat.spinnyclock.viewmodels.GameFragmentViewModel
+import com.alexaat.spinnyclock.viewmodels.Level
 import com.alexaat.spinnyclock.views.OnClockTickListener
 import com.alexaat.spinnyclock.views.OnTimeChangedListener
+import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -56,10 +59,13 @@ class GameFragment : Fragment() {
 
         viewModel.score.observe(viewLifecycleOwner, Observer {
             it?.let{score->
-                binding.score.text = this.resources.getString(R.string.scoreFormat, score)
-                if(score>0){
-                    playCoin()
-                }
+                binding.score.text = resources.getString(R.string.scoreFormat,score)
+            }
+        })
+
+        viewModel.playCoinSound.observe(viewLifecycleOwner, Observer {
+            if(it){
+                playCoin()
             }
         })
 
@@ -81,6 +87,30 @@ class GameFragment : Fragment() {
                     GameFragmentDirections.actionGameFragmentToGameOverFragment(it)
                 findNavController().navigate(action)
 
+            }
+        })
+
+        val h = viewModel.hours
+        val m=viewModel.minutes
+        if(h!=0 || m!=0){
+            binding.clockView.setClockTime(h,m)
+        }
+
+        viewModel.level.observe(viewLifecycleOwner, Observer {
+            it?.let{ level ->
+                val color = when(level){
+                    Level.level_1 -> R.color.colorRed
+                    Level.level_2 -> R.color.colorOrange
+                    Level.level_3 -> R.color.colorYellow
+                    Level.level_4 -> R.color.colorGreen
+                    Level.level_5 -> R.color.colorLightBlue
+                    Level.level_6 -> R.color.colorBlue
+                    Level.level_7 -> R.color.colorViolet
+                    else -> R.color.colorBlack
+                }
+                clockView.hourHandColor = ContextCompat.getColor(requireContext(),color)
+                clockView.minuteHandColor = ContextCompat.getColor(requireContext(),color)
+                clockView.invalidate()
             }
         })
 
@@ -110,7 +140,12 @@ class GameFragment : Fragment() {
     }
 
     override fun onPause() {
-        viewModel.cancelTimer()
         super.onPause()
+        viewModel.cancelTimer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.resumeTimer()
     }
 }

@@ -22,7 +22,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/score" />
+            app:layout_constraintTop_toBottomOf="@+id/score"
+            app:hourHandColor="@color/colorOrange"
+            app:minuteHandColor="@color/colorGreen"/>
 
         <TextView
             android:id="@+id/score"
@@ -32,24 +34,21 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:textSize="20sp"
-            tools:text="Score: 0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Score: 0" />
+
 
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:textSize="20sp"
-            tools:text="22:49"
             app:layout_constraintEnd_toStartOf="@+id/timer"
             app:layout_constraintStart_toEndOf="@+id/score"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="22:49" />
 
         <TextView
             android:id="@+id/timer"
@@ -62,6 +61,8 @@
             tools:text="00:10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

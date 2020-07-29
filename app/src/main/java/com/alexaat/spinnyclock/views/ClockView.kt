@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.withStyledAttributes
 import com.alexaat.spinnyclock.R
 import com.alexaat.spinnyclock.utils.*
 import java.util.*
@@ -12,6 +13,9 @@ import kotlin.math.*
 
 
 class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?= null, defStyleAttr:Int = 0) : View(context,attrs,defStyleAttr){
+
+    var minuteHandColor = 0
+    var hourHandColor = 0
 
     private var hours = 22
     private var minutes = 10
@@ -52,6 +56,13 @@ class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?=
 
     private lateinit var onClockTickListener:OnClockTickListener
     private lateinit var onTimeChangedListener:OnTimeChangedListener
+
+    init{
+        context.withStyledAttributes(attrs,R.styleable.ClockView){
+            minuteHandColor  = getColor(R.styleable.ClockView_minuteHandColor,0)
+            hourHandColor  = getColor(R.styleable.ClockView_hourHandColor,0)
+        }
+    }
 
     fun setOnClockTickListener(onClockTickListener:OnClockTickListener){
         this.onClockTickListener = onClockTickListener
@@ -97,6 +108,8 @@ class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?=
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        minuteHandPaint.color = minuteHandColor
+        hourHandPaint.color = hourHandColor
         canvas?.drawBitmap(scaledClockFace,scaledClockFaceSize.x,scaledClockFaceSize.y,paint)
         canvas?.drawLine(centrePoint.x,centrePoint.y, hourHandPoint.x,hourHandPoint.y, hourHandPaint)
         canvas?.drawLine(centrePoint.x,centrePoint.y, minuteHandPoint.x,minuteHandPoint.y, minuteHandPaint)
@@ -195,6 +208,11 @@ class ClockView @JvmOverloads constructor(context:Context, attrs: AttributeSet?=
         }
     }
 
+    fun setClockTime(hours:Int,minutes:Int){
+        this.hours = hours
+        this.minutes = minutes
+        invalidate()
+    }
 
 }
 

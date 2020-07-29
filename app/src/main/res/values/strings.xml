@@ -10,8 +10,8 @@
     <string name="game_over">Game Over</string>
     <string name="play_again">Play Again</string>
     <string name="start">Start</string>
-    <string name="scoreFormat">Score: %d</string>
     <string name="yourScoreFormat">Your Score: %d</string>
+    <string name="scoreFormat">Score: %d</string>
     <string name="rules_fragment_text">Rules:
     \n- press START button to begin game
     \n- spin minute hand to set required time
@@ -28,5 +28,6 @@
         \n- learn to create custom view
         </string>
     <string name="drawer_header_image">Drawer Header Image</string>
+
 
 </resources>
